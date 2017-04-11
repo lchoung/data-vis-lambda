@@ -38,7 +38,7 @@ Our deliverables for this project include running k-clustering on AWS Lambda, wi
 If we are successful in this first part, we will move on to explore other algorithms on AWS Lambda, such as random forests. 
 
 ## Platform Choice
-We have decided to either use Python or C to implement this project.
+We have decided to use Python to implement this project, to run on Lambda.
 
 ## Schedule
 #### 04.10.17
@@ -48,7 +48,7 @@ Go through all resources and sketch out what our worker algorithm will look like
 #### 04.24.17
 Write, benchmark, and interate on our implementation for worker and master programs. Write Project Checkpoint.
 #### 05.01.17
-Create interactive visualization of k-clustering problem that will allow users to change parameters. Try to connect our programs to the visualization.
+Create interactive visualization of k-clustering problem that will allow users to change parameters. Try to connect our programs to the visualization. Potentially try tree clustering as well if we are ahead of schedule.
 #### 05.08.17
 Benchmark our project and make sure everything works. Start putting together final project presentation.
 #### 05.12.17
