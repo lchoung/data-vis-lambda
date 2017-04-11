@@ -41,12 +41,16 @@ If we are successful in this first part, we will move on to explore other algori
 We have decided to either use Python or C to implement this project.
 
 ## Schedule
-Dates | Goals
---- | ---
-04.10.17 | Finish project proposal and scope out project.
-04.17.17 | Go through all resources and sketch out what our worker algorithm will look like. Figure out how to use AWS Lambda. Sketch out our master program that will be running on S3 to allocate work to threads. Benchmark R Shiny version of the visualization in order to compare our project to in the future.
-04.24.17 | Write, benchmark, and interate on our implementation for worker and master programs. Write Project Checkpoint.
-05.01.17 | Create interactive visualization of k-clustering problem that will allow users to change parameters. Try to connect our programs to the visualization.
-05.08.17 | Benchmark our project and make sure everything works. Start putting together final project presentation.
-05.12.17 | Final project presentation.
+#### 04.10.17
+Finish project proposal and scope out project.
+#### 04.17.17
+Go through all resources and sketch out what our worker algorithm will look like. Figure out how to use AWS Lambda. Sketch out our master program that will be running on S3 to allocate work to threads. Benchmark R Shiny version of the visualization in order to compare our project to in the future.
+#### 04.24.17
+Write, benchmark, and interate on our implementation for worker and master programs. Write Project Checkpoint.
+#### 05.01.17
+Create interactive visualization of k-clustering problem that will allow users to change parameters. Try to connect our programs to the visualization.
+#### 05.08.17
+Benchmark our project and make sure everything works. Start putting together final project presentation.
+#### 05.12.17
+Final project presentation.
 
