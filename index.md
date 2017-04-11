@@ -1,4 +1,5 @@
 # Citius: Interactive data visualizations with AWS Lambda
+#### Lillian Choung (lchoung) and Audasia Ho (audasiah)
 
 Citius aims to provide real-time interactive data visualizations by exploiting AWS Lambda's access to a number of highly elastic threads.
 
@@ -11,7 +12,7 @@ We aim to create a serverless data visualization backend using AWS Lambda. Lambd
 ## Challenge
 
 ### Workload
-TODO: Analyze workload here for k-clustering and random forests
+We must write a parallel algorithm for the k-clustering problem that will be able to accommodate an elastic number of threads that will be running. In each iteration of the algorithm threads will be used to compute the distance between data points and cluster centers. Once data points are reassociated, we must communicate this change to other threads that are computing other clusters in order to recalculate the new means for other clusters. We must be able to efficiently parallelize the computations of the distance and mean, and then pass messages between the threads in order to communicate changes in the clustering of the data. Furthermore, we must figure out how to decide how many threads we want working at a time, depending on how much work needs to be done and what the overhead of having many threads communicating with each other is.
 
 ### Constraints
 AWS Lambda was created with a few design decisions that reflect its purpose as a on-demand short running thread service, but become limitations that we need to work around in order to perform parallel tasks with it. Each individual function is limited to 1.5 GB of memory and 300 seconds runtime. The time limit is less of a concern because our data sets will not be large enough that analyzing a small subset of the set will take more than 5 minutes. However, we have to make sure each of our algorithms is fine-grained enough so that we can store each working subset in the memory we have. We will also need to write a master program that runs on S3 that will schedule work onto these elastic threads and manage communication between them.
@@ -36,6 +37,16 @@ Our deliverables for this project include running k-clustering on AWS Lambda, wi
 
 If we are successful in this first part, we will move on to explore other algorithms on AWS Lambda, such as random forests. 
 
-## Schedule
+## Platform Choice
+We have decided to either use Python or C to implement this project.
 
+## Schedule
+Dates | Goals
+--- | ---
+04.10.17 | Finish project proposal and scope out project.
+04.17.17 | Go through all resources and sketch out what our worker algorithm will look like. Figure out how to use AWS Lambda. Sketch out our master program that will be running on S3 to allocate work to threads. Benchmark R Shiny version of the visualization in order to compare our project to in the future.
+04.24.17 | Write, benchmark, and interate on our implementation for worker and master programs. Write Project Checkpoint.
+05.01.17 | Create interactive visualization of k-clustering problem that will allow users to change parameters. Try to connect our programs to the visualization.
+05.08.17 | Benchmark our project and make sure everything works. Start putting together final project presentation.
+05.12.17 | Final project presentation.
 
