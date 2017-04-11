@@ -1,37 +1,41 @@
-## Welcome to GitHub Pages
+# Citius: Interactive data visualizations with AWS Lambda
 
-You can use the [editor on GitHub](https://github.com/lchoung/data-vis-lambda/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+Citius aims to provide real-time interactive data visualizations by exploiting AWS Lambda's access to a number of highly elastic threads.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Background
 
-### Markdown
+Interactive data visualization applets on the web often suffer from latency issues, especially with larger datasets. As users interact with the visualizations to explore the data input, there may be lags between UI actions such as knob sliding/dropdown selection to adjust parameters and the corresponding update. The members of this team have experienced this with R Shiny interactive plots and D3.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+We aim to create a serverless data visualization backend using AWS Lambda. Lambda allows clients to spin up threads running functions quickly, as a response to a trigger event. We can employ thousands of these threads to run parallel data processing jobs, since Lambda threads are able to send messages between them. To demonstrate the concept, we aim to provide live web demos for k-clustering and potentially random forests for non-trivial problem size N. 
 
-```markdown
-Syntax highlighted code block
+## Challenge
 
-# Header 1
-## Header 2
-### Header 3
+### Workload
+TODO: Analyze workload here for k-clustering and random forests
 
-- Bulleted
-- List
+### Constraints
+AWS Lambda was created with a few design decisions that reflect its purpose as a on-demand short running thread service, but become limitations that we need to work around in order to perform parallel tasks with it. Each individual function is limited to 1.5 GB of memory and 300 seconds runtime. The time limit is less of a concern because our data sets will not be large enough that analyzing a small subset of the set will take more than 5 minutes. However, we have to make sure each of our algorithms is fine-grained enough so that we can store each working subset in the memory we have. We will also need to write a master program that runs on S3 that will schedule work onto these elastic threads and manage communication between them.
 
-1. Numbered
-2. List
+## Resources
+We are referencing several sources to gather research on best practices with running parallel jobs on Lambda. Although this is a relatively new idea, we found a few relevant links for background/research:
 
-**Bold** and _Italic_ and `Code` text
+- [Serverless MapReduce](http://tothestars.io/blog/2016/11/2/serverless-mapreduce)
+- [Video Encoding Paper](https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/fouladi)
+- [Building Scalable and Responsive Big Data Interfaces with AWS Lambda](https://aws.amazon.com/blogs/big-data/building-scalable-and-responsive-big-data-interfaces-with-aws-lambda/)
 
-[Link](url) and ![Image](src)
-```
+The code we write will be mainly from scratch, referencing the AWS Lambda documentation and using the standard parallel algorithms for the data analysis backend:
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+- [k-Clustering](insertpaperhere.com)
+- [Random Forests](somepaperhere.com)
 
-### Jekyll Themes
+## Goals and Deliverables
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/lchoung/data-vis-lambda/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+The main question we'd like to answer in this project is: "Can interactive data visualization benefit from a serverless highly elastic backend?" 
 
-### Support or Contact
+Our deliverables for this project include running k-clustering on AWS Lambda, with an interactive UI that allows the user to change parameters and see a rapid update of the visualiation. We will test on self-generated datasets ranging from 10 to 50 parameters and various n. We will also benchmark on the [Census-Income Dataset](https://archive.ics.uci.edu/ml/datasets/Census-Income+(KDD)), against the corresponding R Shiny version of the visualization and a serial Python based backend. 
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+If we are successful in this first part, we will move on to explore other algorithms on AWS Lambda, such as random forests. 
+
+## Schedule
+
+
