@@ -23,7 +23,6 @@ For the final presentation we would like to have a graph that illustrates the be
 
 Currently we are having issues with figuring out how exactly to use Lambda to run our parallel code, as we realized we have to include some Python libraries. However, we have found resources showing us how to package in Python libraries that are dependencies, so we should be able to finish this part quite soon.
 
-==========
 
 # Proposal
 
@@ -90,7 +89,9 @@ Finish project proposal and scope out project.
 Find an algorithm that we feel is arithmetically intensive but parallelizable for Lambda. Implement the sequential version and parallel version for the Macbook and benchmark it.
 #### 04.24.17
 Implement the parallel version of the algorithm for Lambda and see if it is faster. Write Project Checkpoint.
+
 -----
+
 #### 04.27.17
 Implement sequential and parallel version of another algorithm for testing. [Audasia] 
 Finish implementing parallel version of random forest for Lambda. [Lilli]
