@@ -14,7 +14,26 @@ The tree creating process is computationally intensive, since at each step it se
 
 ![RF Graph](http://i.imgur.com/dHw3Bbi.png)
 
-### Mandelbrot Set (TO WRITE) 
+### Mandelbrot Set
+We also identified generating the Mandelbrot set to be a good algorithm to run on Amazon Lambda. This is because the computation is arithmetically intense, but also straightforward to parallelize. We implemented sequential and parallel algorithms in order to compare them to running the algorithm on AWS Lambda.
+
+We found that the amount of time needed to calculate the Mandelbrot set increased linearly for the sequential algorithm. This makes sense, as the algorithm must iterate over all points in the plane and calculate the value for each point sequentially.
+![Sequential Algorithm Graph](http://i.imgur.com/OolPLcO.png)
+
+The amount of time needed to calculate the Mandelbrot set using a parallel algorithm on a 2-core Macbook Air also increased linearly, however the increase was slower than that of the sequential algorithm. As there are only two cores on this machine, it can only run row calculations in parallel for as many contexts are available. Thus, the larger the image the more time it would take, as there would be a smaller and smaller fraction of the total image that could be calculated in parallel. Our algorithm would calculate the rows in the image in parallel.
+![Parallel Algorithm Graph](http://i.imgur.com/z6rXVFV.png)
+
+The speedup between the sequential and parallel algorithm was consistently around 1.5x after the image size was greater than 100 x 100. This is roughly 2x speedup, with some loss in speedup from communication, as this machine only has two cores. We will be running these algorithms on a 4-core machine in order to see if we can observe ~4x speedup. When the image size is smaller, the sequential algorithm is faster as it doesn't need to deal with communication that the parallel algorithm needs.
+![Speedup of Seq vs Par](http://i.imgur.com/bliJOfG.png)
+
+We then implemented our parallel algorithm for AWS Lambda. Our algorithm started with interleaving the rows and assigning them to different lambda machines, depending on how many machines we planned on using. Each lambda function would take in the size of the image as well as which rows it was responsible for. The function would then return a dictionary of the values for each of the rows it calculated. Our algorithm first split up the rows, then called an API endpoint to call (image height / 10) lambda functions, which would cover all the rows in the image, which each function responsible for 10 rows. When we gathered all the responses, we would create the plane with the data returned from the functions, and have a mandelbrot image to display. We were able to see that the lambda algorithm was significantly faster than the parallel algorithm on the Macbook Air. The lambda algorithm still has an increase in time needed as the image dimensions increase, as each row on a lambda machine is still calculated in sequential order. Thus, the longer the row the more time it would take.
+![Lambda Algorithm Graph](http://i.imgur.com/PEbLKkm.png)
+
+There was significant speedup between the local machine parallel algorithm and the lambda parallel algorithm, as the local machine could only do 2 rows in parallel at a time, whereas we were able to boot up to 1000 lambda functions at a given time. 
+![Speedup of Par vs Lambda](http://i.imgur.com/3dNPpYy.png)
+
+However, we found that at image sizes greater than 3500 x 3500, our algorithm was unable to complete the requests. This is because of the Amazong API Gateway time limit of 10 seconds, which would not allow us to wait for a response from our lambda functions for longer. We are currently working to figure out how to call our lambda functions in such a way to not be bottlenecked by the API Gateway. We also have not explored creating more lambda functions and assigning fewer rows to each, in order to speed up the process. This idea has promise, as we have not nearly reached the limit of number of lambda functions that can concurrently run.
+
 ### Map-Reduce with S3 temp files (TO DO) 
 
 ## Details of Implementation (TO WRITE) 
