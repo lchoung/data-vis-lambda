@@ -1,7 +1,24 @@
-# Citius: Interactive data visualizations with AWS Lambda
+# Serverless Map + Reduce with AWS Lambda
 #### Lillian Choung (lchoung) and Audasia Ho (audasiah)
 
-Citius aims to provide real-time interactive data visualizations by exploiting AWS Lambda's access to a number of highly elastic threads.
+We aim to demonstrate the power of AWS Lambda's microservice platform for serverless computing. Our focus is upon massively parallel map and map/reduce problems, and we benchmark against typical personal computers (4-core MacBook Pro) and more powerful academic computers (CMU linux.andrew.cmu.edu with 40 cores).
+
+**The main challenge of this project is to work around the memory, communication, and concurrent execution limits (1000 parallel jobs) to identify use cases where using Amazon Lambda would be preferable over running your own multi-core servers.** The ideal algorithm can be uploaded to Lambda via a zipped deployment package of under 50 MB including scientific packages. Each lambda call itself cannot use more than 512 MB of space. Most importantly, each driver to Lambda and Lambda to S3 (AWS storage filesystem) communication unit happens across a HTTP network, which means our system is quite bandwidth limited. (Implementation wise, deployment was tricky with scientific libraries, since Lambda's original purpose is to process in short 100-500ms bursts, event-triggered requests, not do scientific computation)
+
+## Intermediate Results
+
+### Random Forest
+We identified Random Forest as a good algorithm to run on Amazon Lambda. This algorithm trains a random forest by computing n independent trees, basically a map. An individual tree during sequential evaluation took about 8 seconds to train,on our 4-core and 40-core machine, and 16 seconds on Amazon Lambda. The extra 8 seconds Lambda requires is due to communicating the driver's requests over HTTP, and the short but non-trivial time it takes for the lambda function to boot and open all the included scientific libraries.
+
+The tree creating process is computationally intensive, since at each step it searches for local optimum for all data points across the feature space. But crucially, all trees are independent. This means that the 4-core implementation on our personal machinse is consistently faster than the Lambda process implementation for up to 8 trees. However, past n = 8 trees, **the amount of time the Lambda uses levels off to 16-20 seconds per random forest**, while the personal machine implementation doubles in time with each double in size of tree. With a limited number of cores, the personal machine can only run tree computations for as many contexts are available on the machine. But Lambda can compute all of them simultaneously and is bottlenecked by the speed by which it can communicate with the local driver. However, we also observed high variance in the runtime of each n number of trees on AWS Lambda, since we have no control of how AWS Lambda chooses to schedule, run, and pause the function calls. 
+
+![RF Graph](http://i.imgur.com/dHw3Bbi.png)
+
+### Mandelbrot Set (TO WRITE) 
+### Map-Reduce with S3 temp files (TO DO) 
+
+## Details of Implementation (TO WRITE) 
+
 
 # Checkpoint
 
