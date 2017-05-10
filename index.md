@@ -13,7 +13,7 @@ We decided to choose the random forest algorithm, as it handles a lot of data bu
 
 So far, we have implemented a sequential and parallel version of the random forests tree generation to be run on the Macbook Pro. We have seen a 4x speedup from the parallel version running on a 4-core machine, which means that we have parallelized it for the Macbook (as seen below).
 
-![Speedup](https://scontent.fagc1-2.fna.fbcdn.net/v/t35.0-12/18120508_1504818782861963_830733573_o.png?oh=1fce79e33f1c9b8b46c94584f55b22f3&oe=5901ECF3 "4x speedup")
+![Speedup](https://www.dropbox.com/s/jwonvoa3jmuecso/18120508_1504818782861963_830733573_o.png?dl=0 "4x speedup")
 
 In order to do the above, we had to gather the data from the Lending Club Loan Data, and then first clean the data in order to make it usable for our purposes. Then, we implemented the sequential version of the tree generation algorithm, as seen in [this youtube video](https://www.youtube.com/watch?v=loNcrMjYh64). We then used multiprocessing in python in order to parallelize the data for the 4-core machine (Macbook).
 
