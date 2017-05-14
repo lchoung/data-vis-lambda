@@ -1,6 +1,8 @@
 # Serverless Map + Reduce with AWS Lambda
 #### Lillian Choung (lchoung) and Audasia Ho (audasiah)
 
+Final Writeup can be found [here.](418_final_writeup.pdf)
+
 We aim to demonstrate the power of AWS Lambda's microservice platform for serverless computing. Our focus is upon massively parallel map and map/reduce problems, and we benchmark against typical personal computers (4-core MacBook Pro) and more powerful academic computers (CMU linux.andrew.cmu.edu with 40 cores).
 
 **The main challenge of this project is to work around the memory, communication, and concurrent execution limits (1000 parallel jobs) to identify use cases where using Amazon Lambda would be preferable over running your own multi-core servers.** The ideal algorithm can be uploaded to Lambda via a zipped deployment package of under 50 MB including scientific packages. Each lambda call itself cannot use more than 512 MB of space. Most importantly, each driver to Lambda and Lambda to S3 (AWS storage filesystem) communication unit happens across a HTTP network, which means our system is quite bandwidth limited. (Implementation wise, deployment was tricky with scientific libraries, since Lambda's original purpose is to process in short 100-500ms bursts, event-triggered requests, not do scientific computation)
